@@ -65,3 +65,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
   CMD wget -q --spider http://localhost:1337/_health || exit 1
 
 CMD ["npm", "start"]
+ 
