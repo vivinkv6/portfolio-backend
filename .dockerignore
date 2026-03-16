@@ -1,0 +1,39 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist
+build
+.cache
+.tmp
+
+# Strapi generated
+.strapi
+.cache
+
+# Environment
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Logs
+logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Deployment
+.deployment
