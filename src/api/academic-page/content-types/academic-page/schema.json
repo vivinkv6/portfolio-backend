@@ -1,0 +1,28 @@
+{
+  "kind": "singleType",
+  "collectionName": "academic_pages",
+  "info": {
+    "singularName": "academic-page",
+    "pluralName": "academic-pages",
+    "displayName": "Academic Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "page_heading": {
+      "type": "string"
+    },
+    "journey": {
+      "type": "component",
+      "component": "academic.journey",
+      "repeatable": true
+    },
+    "seo": {
+      "type": "component",
+      "component": "common.seo",
+      "repeatable": false
+    }
+  }
+}

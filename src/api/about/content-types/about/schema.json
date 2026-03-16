@@ -1,0 +1,40 @@
+{
+  "kind": "singleType",
+  "collectionName": "abouts",
+  "info": {
+    "singularName": "about",
+    "pluralName": "abouts",
+    "displayName": "About Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "page_heading": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "content": {
+      "type": "component",
+      "component": "common.content-block",
+      "repeatable": true
+    },
+    "stats": {
+      "type": "component",
+      "component": "about.stats",
+      "repeatable": true
+    },
+    "seo": {
+      "type": "component",
+      "component": "common.seo",
+      "repeatable": false
+    }
+  }
+}

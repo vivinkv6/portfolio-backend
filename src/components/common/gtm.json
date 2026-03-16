@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_common_gtms",
+  "info": {
+    "displayName": "GTM"
+  },
+  "options": {},
+  "attributes": {
+    "head_script": {
+      "type": "text"
+    },
+    "body_script": {
+      "type": "text"
+    },
+    "other_script": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

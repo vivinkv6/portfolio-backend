@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_common_social_medias",
+  "info": {
+    "displayName": "Social Media"
+  },
+  "options": {},
+  "attributes": {
+    "facebook_url": {
+      "type": "string"
+    },
+    "linkedin_url": {
+      "type": "string"
+    },
+    "gmail": {
+      "type": "string"
+    },
+    "github_link": {
+      "type": "string"
+    },
+    "twitter_link": {
+      "type": "string"
+    },
+    "instagram_link": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

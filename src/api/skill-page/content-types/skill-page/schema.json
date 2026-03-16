@@ -1,0 +1,23 @@
+{
+  "kind": "singleType",
+  "collectionName": "skill_pages",
+  "info": {
+    "singularName": "skill-page",
+    "pluralName": "skill-pages",
+    "displayName": "Skill Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "page_heading": {
+      "type": "string"
+    },
+    "seo": {
+      "type": "component",
+      "component": "common.seo",
+      "repeatable": false
+    }
+  }
+}

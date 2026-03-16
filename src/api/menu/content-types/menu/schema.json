@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "menus",
+  "info": {
+    "singularName": "menu",
+    "pluralName": "menus",
+    "displayName": "Menu"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "footer": {
+      "type": "component",
+      "component": "menu.footer",
+      "repeatable": true
+    },
+    "header": {
+      "type": "component",
+      "component": "common.button",
+      "repeatable": true
+    },
+    "page_heading": {
+      "type": "string",
+      "default": "Menu"
+    }
+  }
+}

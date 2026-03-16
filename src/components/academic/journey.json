@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_academic_journeys",
+  "info": {
+    "displayName": "Journey"
+  },
+  "options": {},
+  "attributes": {
+    "start_date": {
+      "type": "date"
+    },
+    "end_date": {
+      "type": "date"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

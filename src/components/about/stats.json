@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_about_stats",
+  "info": {
+    "displayName": "Stats"
+  },
+  "options": {},
+  "attributes": {
+    "count": {
+      "type": "string"
+    },
+    "short_title": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

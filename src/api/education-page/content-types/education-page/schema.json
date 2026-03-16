@@ -1,0 +1,23 @@
+{
+  "kind": "singleType",
+  "collectionName": "education_pages",
+  "info": {
+    "singularName": "education-page",
+    "pluralName": "education-pages",
+    "displayName": "Education Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "page_heading": {
+      "type": "string"
+    },
+    "seo": {
+      "type": "component",
+      "component": "common.seo",
+      "repeatable": false
+    }
+  }
+}

@@ -15,19 +15,27 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
+    "@_sh/strapi-plugin-ckeditor": "^7.1.0",
     "@strapi/plugin-cloud": "5.38.0",
+    "@strapi/plugin-color-picker": "^5.38.0",
     "@strapi/plugin-users-permissions": "5.38.0",
+    "@strapi/provider-email-nodemailer": "^5.39.0",
+    "@strapi/provider-upload-cloudinary": "^5.38.0",
     "@strapi/strapi": "5.38.0",
+    "axios": "^1.13.6",
     "pg": "8.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
+    "sharp": "^0.34.5",
+    "strapi-plugin-populate-deep": "^3.0.1",
     "styled-components": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "patch-package": "^8.0.1",
     "typescript": "^5"
   },
   "engines": {

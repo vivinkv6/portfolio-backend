@@ -1,4 +1,5 @@
-// import type { Core } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
+import sharp from 'sharp';
 
 export default {
   /**
@@ -7,7 +8,19 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+  register({ strapi }: { strapi: Core.Strapi }) {
+    strapi.customFields.register({
+      name: 'tags',
+      type: 'text',
+      inputSize: {
+        default: 4,
+        isResizable: true,
+      },
+    });
+
+    // Fix EBUSY error on Windows by disabling sharp cache
+    sharp.cache(false);
+  },
 
   /**
    * An asynchronous bootstrap function that runs before

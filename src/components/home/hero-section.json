@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_home_hero_sections",
+  "info": {
+    "displayName": "Hero Section"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "roles": {
+      "type": "string"
+    },
+    "short_description": {
+      "type": "text"
+    },
+    "button1": {
+      "type": "component",
+      "component": "common.button",
+      "repeatable": false
+    },
+    "button2": {
+      "type": "component",
+      "component": "common.button",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}
