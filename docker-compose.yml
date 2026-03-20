@@ -1,22 +1,36 @@
-version: "3"
+version: "3.8"
+
 services:
   strapi:
     container_name: strapi
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: strapi:latest
     restart: unless-stopped
+
     environment:
-      # Server
-      HOST: ${HOST}
-      PORT: ${PORT}
+      # ======================
+      # App Config
+      # ======================
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 1337
       URL: ${URL}
-      # Secrets
+
+      # ======================
+      # Security / Secrets
+      # ======================
       APP_KEYS: ${APP_KEYS}
       API_TOKEN_SALT: ${API_TOKEN_SALT}
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
       ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+
+      # ======================
       # Database
+      # ======================
       DATABASE_CLIENT: ${DATABASE_CLIENT}
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
@@ -25,28 +39,45 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_SSL: ${DATABASE_SSL}
       DATABASE_FILENAME: ${DATABASE_FILENAME}
-      JWT_SECRET: ${JWT_SECRET}
+
+      # ======================
       # Cloudinary
-      CLOUDINARY_SECRET: ${CLOUDINARY_SECRET}
-      CLOUDINARY_KEY: ${CLOUDINARY_KEY}
+      # ======================
       CLOUDINARY_NAME: ${CLOUDINARY_NAME}
+      CLOUDINARY_KEY: ${CLOUDINARY_KEY}
+      CLOUDINARY_SECRET: ${CLOUDINARY_SECRET}
+
+      # ======================
       # SMTP
+      # ======================
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
-      NODE_ENV: ${NODE_ENV}
+
     volumes:
-      - ./public/uploads:/opt/app/public/uploads
-      # Uncomment the lines below if you want changes in config/src to reflect immediately (note: requires rebuild in production mode)
-      # - ./config:/opt/app/config
-      # - ./src:/opt/app/src
-      # - ./package.json:/opt/app/package.json
-      # - ./package-lock.json:/opt/app/package-lock.json
+      - strapi_uploads:/opt/app/public/uploads
+
     ports:
       - "1337:1337"
+
     networks:
       - strapi
 
+    # ✅ Healthcheck (important for production stability)
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:1337/_health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+    # ✅ Prevent memory crashes (important for small VPS like yours ~4GB RAM)
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+volumes:
+  strapi_uploads:
+
 networks:
   strapi:
-    name: strapi
     driver: bridge
