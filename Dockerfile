@@ -6,8 +6,12 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
 COPY package.json package-lock.json ./
-RUN npm install -g node-gyp
-RUN npm config set fetch-retry-maxtimeout 600000 -g && npm install --only=production
+RUN npm install -g node-gyp \
+    && npm config set fetch-retry-maxtimeout 600000 -g \
+    && npm config set fetch-retries 5 -g \
+    && npm config set fetch-retry-mintimeout 20000 -g \
+    && npm ci --only=production
+
 ENV PATH=/opt/node_modules/.bin:$PATH
 WORKDIR /opt/app
 COPY . .
@@ -23,7 +27,7 @@ COPY --from=build /opt/node_modules ./node_modules
 WORKDIR /opt/app
 COPY --from=build /opt/app ./
 ENV PATH=/opt/node_modules/.bin:$PATH
- 
+
 RUN chown -R node:node /opt/app
 USER node
 EXPOSE 1337

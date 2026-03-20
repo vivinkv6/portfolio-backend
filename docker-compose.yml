@@ -62,14 +62,13 @@ services:
     networks:
       - strapi
 
-    # ✅ Healthcheck (important for production stability)
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:1337/_health"]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 60s
 
-    # ✅ Prevent memory crashes (important for small VPS like yours ~4GB RAM)
     deploy:
       resources:
         limits:
