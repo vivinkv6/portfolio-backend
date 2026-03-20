@@ -1,68 +1,32 @@
-# -----------------------------
-# Stage 1 — Install dependencies
-# -----------------------------
-FROM node:22-alpine AS deps
-
-WORKDIR /opt
-
-RUN apk add --no-cache \
-    build-base \
-    python3 \
-    pkgconfig \
-    vips-dev \
-    zlib-dev \
-    libpng-dev
-
-COPY package.json package-lock.json ./
-
-RUN npm ci --omit=dev && npm cache clean --force
-
-
-# -----------------------------
-# Stage 2 — Build Strapi
-# -----------------------------
+# Creating multi-stage build for production
 FROM node:22-alpine AS build
+RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
+WORKDIR /opt/
+COPY package.json package-lock.json ./
+RUN npm install -g node-gyp
+RUN npm config set fetch-retry-maxtimeout 600000 -g && npm install --only=production
+ENV PATH=/opt/node_modules/.bin:$PATH
 WORKDIR /opt/app
-
-COPY --from=deps /opt/node_modules ./node_modules
 COPY . .
-
-ENV NODE_ENV=production
-
 RUN npm run build
 
-
-# -----------------------------
-# Stage 3 — Production Runtime
-# -----------------------------
-FROM node:22-alpine AS runner
-
+# Creating final production image
+FROM node:22-alpine
+RUN apk add --no-cache vips-dev
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+WORKDIR /opt/
+COPY --from=build /opt/node_modules ./node_modules
 WORKDIR /opt/app
-
-RUN apk add --no-cache vips
-
-ENV NODE_ENV=production
-ENV NODE_OPTIONS="--max-old-space-size=512"
-
-COPY --from=build /opt/app/package.json ./
-COPY --from=build /opt/app/node_modules ./node_modules
-COPY --from=build /opt/app/dist ./dist
-COPY --from=build /opt/app/public ./public
-COPY --from=build /opt/app/config ./config
-COPY --from=build /opt/app/database ./database
-
-ENV PATH="/opt/app/node_modules/.bin:$PATH"
-
-RUN addgroup -S strapi && adduser -S strapi -G strapi \
-    && chown -R strapi:strapi /opt/app
-
-USER strapi
-
-EXPOSE 1337
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
-  CMD wget -q --spider http://localhost:1337/_health || exit 1
-
-CMD ["npm", "start"]
+COPY --from=build /opt/app ./
+ENV PATH=/opt/node_modules/.bin:$PATH
  
+RUN chown -R node:node /opt/app
+USER node
+EXPOSE 1337
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:1337/_health || exit 1
+CMD ["npm", "run", "start"]
