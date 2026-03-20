@@ -42,10 +42,12 @@ export default {
     menu: {
       logo: Logo,
     },
+/*
     tutorials: false,
     notifications: {
       releases: false,
     },
+    */
     translations: {
       en: {
         "app.components.LeftMenu.navbrand.title": "Admin Dashboard",
@@ -59,7 +61,7 @@ export default {
 
         "Settings.profile.form.section.experience.interfaceLanguageHelp":
           "Language preferences will apply only to your account",
-          "Settings.permissions.users.listview.header.subtitle": "All the users who have access to the Admin panel",
+        "Settings.permissions.users.listview.header.subtitle": "All the users who have access to the Admin panel",
       },
     },
   },

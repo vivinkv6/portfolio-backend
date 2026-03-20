@@ -1,5 +1,4 @@
 import type { Core } from '@strapi/strapi';
-import sharp from 'sharp';
 
 export default {
   /**
@@ -17,9 +16,6 @@ export default {
         isResizable: true,
       },
     });
-
-    // Fix EBUSY error on Windows by disabling sharp cache
-    sharp.cache(false);
   },
 
   /**
