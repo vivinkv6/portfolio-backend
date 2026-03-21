@@ -948,6 +948,7 @@ export interface ApiSkillCategorySkillCategory
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Unique;
+    priority: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
     skills: Schema.Attribute.Relation<'oneToMany', 'api::skill.skill'>;
     updatedAt: Schema.Attribute.DateTime;
