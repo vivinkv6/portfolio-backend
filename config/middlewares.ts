@@ -36,9 +36,9 @@ const config: Core.Config.Middlewares = [
         "http://localhost:4321",
         "http://127.0.0.1:4321",
         "https://vivinkv.me",
-        "http://vivinkv.me",
         "https://www.vivinkv.me",
-        "http://www.vivinkv.me"
+        "https://staging.vivinkv.me",
+        "https://www.staging.vivinkv.me"
       ],
       headers: "*",
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
