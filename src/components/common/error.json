@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_common_errors",
+  "info": {
+    "displayName": "Error"
+  },
+  "options": {},
+  "attributes": {
+    "tag": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "short_description": {
+      "type": "string"
+    },
+    "button1": {
+      "type": "component",
+      "component": "common.button",
+      "repeatable": false
+    },
+    "button2": {
+      "type": "component",
+      "component": "common.button",
+      "repeatable": false
+    },
+    "status_code": {
+      "type": "integer"
+    }
+  },
+  "config": {}
+}

@@ -63,6 +63,21 @@ export interface CommonContentBlock extends Struct.ComponentSchema {
   };
 }
 
+export interface CommonError extends Struct.ComponentSchema {
+  collectionName: 'components_common_errors';
+  info: {
+    displayName: 'Error';
+  };
+  attributes: {
+    button1: Schema.Attribute.Component<'common.button', false>;
+    button2: Schema.Attribute.Component<'common.button', false>;
+    short_description: Schema.Attribute.String;
+    status_code: Schema.Attribute.Integer;
+    tag: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface CommonGtm extends Struct.ComponentSchema {
   collectionName: 'components_common_gtms';
   info: {
@@ -161,6 +176,7 @@ declare module '@strapi/strapi' {
       'blog.section': BlogSection;
       'common.button': CommonButton;
       'common.content-block': CommonContentBlock;
+      'common.error': CommonError;
       'common.gtm': CommonGtm;
       'common.seo': CommonSeo;
       'common.social-media': CommonSocialMedia;

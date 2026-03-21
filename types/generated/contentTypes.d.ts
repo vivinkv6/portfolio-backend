@@ -703,6 +703,37 @@ export interface ApiEducationEducation extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiErrorPageErrorPage extends Struct.SingleTypeSchema {
+  collectionName: 'error_pages';
+  info: {
+    displayName: 'Error Pages';
+    pluralName: 'error-pages';
+    singularName: 'error-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::error-page.error-page'
+    > &
+      Schema.Attribute.Private;
+    not_found_page: Schema.Attribute.Component<'common.error', false>;
+    page_heading: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Error Page'>;
+    publishedAt: Schema.Attribute.DateTime;
+    server_error_page: Schema.Attribute.Component<'common.error', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiExperiencePageExperiencePage
   extends Struct.SingleTypeSchema {
   collectionName: 'experience_pages';
@@ -1538,6 +1569,7 @@ declare module '@strapi/strapi' {
       'api::company.company': ApiCompanyCompany;
       'api::education-page.education-page': ApiEducationPageEducationPage;
       'api::education.education': ApiEducationEducation;
+      'api::error-page.error-page': ApiErrorPageErrorPage;
       'api::experience-page.experience-page': ApiExperiencePageExperiencePage;
       'api::experience.experience': ApiExperienceExperience;
       'api::general-setting.general-setting': ApiGeneralSettingGeneralSetting;

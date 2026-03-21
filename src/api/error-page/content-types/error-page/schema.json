@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "error_pages",
+  "info": {
+    "singularName": "error-page",
+    "pluralName": "error-pages",
+    "displayName": "Error Pages"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "not_found_page": {
+      "type": "component",
+      "component": "common.error",
+      "repeatable": false
+    },
+    "server_error_page": {
+      "type": "component",
+      "component": "common.error",
+      "repeatable": false
+    },
+    "page_heading": {
+      "type": "string",
+      "default": "Error Page"
+    }
+  }
+}
