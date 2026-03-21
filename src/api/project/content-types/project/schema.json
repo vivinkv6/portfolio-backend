@@ -42,6 +42,11 @@
     "hide_project": {
       "type": "boolean",
       "default": false
+    },
+    "seo": {
+      "type": "component",
+      "component": "common.seo",
+      "repeatable": false
     }
   }
 }

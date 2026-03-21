@@ -29,7 +29,22 @@ const config: Core.Config.Middlewares = [
       },
     },
   },
-  "strapi::cors",
+  {
+    name: "strapi::cors",
+    config: {
+      origin: [
+        "http://localhost:4321",
+        "http://127.0.0.1:4321",
+        "https://vivinkv.me",
+        "http://vivinkv.me",
+        "https://www.vivinkv.me",
+        "http://www.vivinkv.me"
+      ],
+      headers: "*",
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
+      keepHeaderOnError: true
+    }
+  },
   "strapi::poweredBy",
   "strapi::query",
   "strapi::body",

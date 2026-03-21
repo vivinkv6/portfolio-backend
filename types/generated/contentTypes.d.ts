@@ -915,6 +915,7 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     priority: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
     screenshot: Schema.Attribute.Media<'images'>;
+    seo: Schema.Attribute.Component<'common.seo', false>;
     short_description: Schema.Attribute.Text;
     skills: Schema.Attribute.Relation<'manyToMany', 'api::skill.skill'>;
     source_code_link: Schema.Attribute.String;
