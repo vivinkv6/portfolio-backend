@@ -61,6 +61,10 @@
     "is_default": {
       "type": "boolean",
       "default": false
+    },
+    "hide_theme": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
