@@ -45,6 +45,14 @@ const config: Core.Config.Middlewares = [
       keepHeaderOnError: true
     }
   },
+  {
+    name: "global::rate-limit",
+    config: {
+      max: 100,
+      windowMs: 60_000,
+      paths: ["/api"]
+    }
+  },
   "strapi::poweredBy",
   "strapi::query",
   "strapi::body",
