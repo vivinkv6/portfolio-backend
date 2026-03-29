@@ -34,6 +34,14 @@ type SessionResult = {
 
 type StrapiStore = ReturnType<Core.Strapi["store"]>;
 
+const now = () => Date.now();
+
+const logDuration = (strapi: Core.Strapi, label: string, startedAt: number, meta?: Record<string, unknown>) => {
+  const durationMs = Date.now() - startedAt;
+  const suffix = meta ? ` ${JSON.stringify(meta)}` : "";
+  strapi.log.info(`[admin-otp] ${label} completed in ${durationMs}ms${suffix}`);
+};
+
 const normalizeEmail = (email: unknown) => {
   if (typeof email !== "string") {
     return "";
@@ -64,7 +72,16 @@ const createOtpCode = () =>
   crypto.randomInt(0, 10 ** OTP_DIGITS).toString().padStart(OTP_DIGITS, "0");
 
 const createOtpHash = (challengeId: string, code: string, salt: string) =>
-  crypto.scryptSync(`${challengeId}:${code}`, salt, 64).toString("hex");
+  new Promise<string>((resolve, reject) => {
+    crypto.scrypt(`${challengeId}:${code}`, salt, 64, (error, derivedKey) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      resolve(derivedKey.toString("hex"));
+    });
+  });
 
 const getStore = (strapi: Core.Strapi) =>
   strapi.store({
@@ -106,6 +123,7 @@ const getChallenge = async (store: StrapiStore, challengeId: string) => {
 };
 
 const sendOtpEmail = async (strapi: Core.Strapi, email: string, code: string) => {
+  const startedAt = now();
   await strapi.plugin("email").service("email").send({
     to: email,
     subject: "Your admin login OTP code",
@@ -116,6 +134,7 @@ const sendOtpEmail = async (strapi: Core.Strapi, email: string, code: string) =>
       <p>If you did not try to sign in, please change your password immediately.</p>
     `,
   });
+  logDuration(strapi, "sendOtpEmail", startedAt, { email });
 };
 
 const createSession = async (
@@ -170,6 +189,7 @@ const createSession = async (
 
 export default ({ strapi }: { strapi: Core.Strapi }) => ({
   async createChallenge(body: Record<string, unknown>) {
+    const requestStartedAt = now();
     const email = normalizeEmail(body.email);
     const password = ensureString(body.password, "Password is required");
     const deviceId =
@@ -182,10 +202,12 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       throw new ValidationError("Email is required");
     }
 
+    const credentialsStartedAt = now();
     const [, user, info] = (await strapi.service("admin::auth").checkCredentials({
       email,
       password,
     })) as [null, { id: number; email: string } | false, { message?: string }?];
+    logDuration(strapi, "checkCredentials", credentialsStartedAt, { email });
 
     if (!user) {
       throw new ApplicationError(info?.message ?? "Invalid credentials");
@@ -196,6 +218,9 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     const salt = crypto.randomBytes(16).toString("hex");
     const expiresAt = new Date(Date.now() + getExpirySeconds() * 1000).toISOString();
     const store = getStore(strapi);
+    const hashStartedAt = now();
+    const hash = await createOtpHash(challengeId, code, salt);
+    logDuration(strapi, "createOtpHash", hashStartedAt, { email });
 
     const challenge: AdminOtpChallenge = {
       id: challengeId,
@@ -204,18 +229,21 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       deviceId,
       rememberMe,
       salt,
-      hash: createOtpHash(challengeId, code, salt),
+      hash,
       attempts: 0,
       resendCount: 0,
       expiresAt,
     };
 
+    const storeStartedAt = now();
     await store.set({
       key: getStoreKey(challengeId),
       value: challenge,
     });
+    logDuration(strapi, "storeChallenge", storeStartedAt, { email, challengeId });
 
     await sendOtpEmail(strapi, email, code);
+    logDuration(strapi, "createChallenge", requestStartedAt, { email, challengeId });
 
     return {
       challengeId,
@@ -226,9 +254,12 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
   },
 
   async resendChallenge(body: Record<string, unknown>) {
+    const requestStartedAt = now();
     const challengeId = ensureString(body.challengeId, "Challenge ID is required");
     const store = getStore(strapi);
+    const loadStartedAt = now();
     const current = await getChallenge(store, challengeId);
+    logDuration(strapi, "loadChallengeForResend", loadStartedAt, { email: current.email, challengeId });
 
     if (current.resendCount >= MAX_RESENDS) {
       await deleteChallenge(store, challengeId);
@@ -237,21 +268,27 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
 
     const code = createOtpCode();
     const salt = crypto.randomBytes(16).toString("hex");
+    const hashStartedAt = now();
+    const hash = await createOtpHash(challengeId, code, salt);
+    logDuration(strapi, "createOtpHashForResend", hashStartedAt, { email: current.email, challengeId });
     const nextChallenge: AdminOtpChallenge = {
       ...current,
       salt,
-      hash: createOtpHash(challengeId, code, salt),
+      hash,
       resendCount: current.resendCount + 1,
       attempts: 0,
       expiresAt: new Date(Date.now() + getExpirySeconds() * 1000).toISOString(),
     };
 
+    const storeStartedAt = now();
     await store.set({
       key: getStoreKey(challengeId),
       value: nextChallenge,
     });
+    logDuration(strapi, "storeResentChallenge", storeStartedAt, { email: current.email, challengeId });
 
     await sendOtpEmail(strapi, current.email, code);
+    logDuration(strapi, "resendChallenge", requestStartedAt, { email: current.email, challengeId });
 
     return {
       challengeId,
@@ -264,17 +301,22 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
     body: Record<string, unknown>,
     options: { secureRequest: boolean }
   ) {
+    const requestStartedAt = now();
     const challengeId = ensureString(body.challengeId, "Challenge ID is required");
     const code = ensureOtpFormat(body.code);
     const store = getStore(strapi);
+    const loadStartedAt = now();
     const challenge = await getChallenge(store, challengeId);
+    logDuration(strapi, "loadChallengeForVerify", loadStartedAt, { email: challenge.email, challengeId });
 
     if (challenge.attempts >= MAX_ATTEMPTS) {
       await deleteChallenge(store, challengeId);
       throw new ApplicationError("Maximum OTP attempts exceeded. Please log in again.");
     }
 
-    const computedHash = createOtpHash(challengeId, code, challenge.salt);
+    const hashStartedAt = now();
+    const computedHash = await createOtpHash(challengeId, code, challenge.salt);
+    logDuration(strapi, "createOtpHashForVerify", hashStartedAt, { email: challenge.email, challengeId });
     const isValid = crypto.timingSafeEqual(
       Buffer.from(computedHash, "hex"),
       Buffer.from(challenge.hash, "hex")
@@ -288,6 +330,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         throw new ApplicationError("Maximum OTP attempts exceeded. Please log in again.");
       }
 
+      const storeStartedAt = now();
       await store.set({
         key: getStoreKey(challengeId),
         value: {
@@ -295,18 +338,25 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           attempts: nextAttempts,
         },
       });
+      logDuration(strapi, "storeFailedAttempt", storeStartedAt, { email: challenge.email, challengeId, attempts: nextAttempts });
 
       throw new ApplicationError("Invalid OTP code");
     }
 
+    const deleteStartedAt = now();
     await deleteChallenge(store, challengeId);
+    logDuration(strapi, "deleteChallengeAfterVerify", deleteStartedAt, { email: challenge.email, challengeId });
 
-    return createSession(
+    const sessionStartedAt = now();
+    const session = await createSession(
       strapi,
       challenge.userId,
       challenge.deviceId,
       challenge.rememberMe,
       options.secureRequest
     );
+    logDuration(strapi, "createSession", sessionStartedAt, { email: challenge.email, challengeId });
+    logDuration(strapi, "verifyChallenge", requestStartedAt, { email: challenge.email, challengeId });
+    return session;
   },
 });
