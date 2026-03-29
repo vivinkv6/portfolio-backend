@@ -207,6 +207,9 @@ const Login = ({ children })=>{
     const [adminLoginWithOtp, { isLoading: isLoggingIn }] = useAdminLoginWithOtpMutation();
     const [verifyAdminLoginOtp] = useVerifyAdminLoginOtpMutation();
     const [resendAdminLoginOtp, { isLoading: isResendingOtp }] = useResendAdminLoginOtpMutation();
+    React.useEffect(()=>{
+        document.title = 'Admin Dashboard';
+    }, []);
     const handleLogin = async (body)=>{
         setApiError(undefined);
         const res = await adminLoginWithOtp({
