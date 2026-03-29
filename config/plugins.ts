@@ -26,6 +26,12 @@ const config = ({
       providerOptions: {
         host: 'smtp.gmail.com',
         port: 587,
+        pool: true,
+        maxConnections: 5,
+        maxMessages: 100,
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 60000,
         auth: {
           user: process.env.SMTP_USERNAME,
           pass: process.env.SMTP_PASSWORD
