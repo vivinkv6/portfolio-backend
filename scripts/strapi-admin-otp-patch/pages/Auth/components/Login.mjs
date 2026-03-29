@@ -204,7 +204,7 @@ const Login = ({ children })=>{
     const navigate = useNavigate();
     const dispatch = useTypedDispatch();
     const { toggleNotification } = useNotification();
-    const [adminLoginWithOtp] = useAdminLoginWithOtpMutation();
+    const [adminLoginWithOtp, { isLoading: isLoggingIn }] = useAdminLoginWithOtpMutation();
     const [verifyAdminLoginOtp] = useVerifyAdminLoginOtpMutation();
     const [resendAdminLoginOtp, { isLoading: isResendingOtp }] = useResendAdminLoginOtpMutation();
     const handleLogin = async (body)=>{
@@ -396,9 +396,10 @@ const Login = ({ children })=>{
                                             /*#__PURE__*/ jsx(Button, {
                                                 fullWidth: true,
                                                 type: "submit",
+                                                disabled: !otpStep && isLoggingIn,
                                                 children: formatMessage({
                                                     id: otpStep ? 'Auth.form.button.verifyOtp' : 'Auth.form.button.login',
-                                                    defaultMessage: otpStep ? 'Verify OTP' : 'Login'
+                                                    defaultMessage: otpStep ? 'Verify OTP' : isLoggingIn ? 'Login...' : 'Login'
                                                 })
                                             }),
                                             otpStep ? /*#__PURE__*/ jsxs(Flex, {

@@ -226,7 +226,7 @@ const Login = ({ children })=>{
     const navigate = reactRouterDom.useNavigate();
     const dispatch = hooks.useTypedDispatch();
     const { toggleNotification } = Notifications.useNotification();
-    const [adminLoginWithOtp] = auth.useAdminLoginWithOtpMutation();
+    const [adminLoginWithOtp, { isLoading: isLoggingIn }] = auth.useAdminLoginWithOtpMutation();
     const [verifyAdminLoginOtp] = auth.useVerifyAdminLoginOtpMutation();
     const [resendAdminLoginOtp, { isLoading: isResendingOtp }] = auth.useResendAdminLoginOtpMutation();
     const handleLogin = async (body)=>{
@@ -418,9 +418,10 @@ const Login = ({ children })=>{
                                             /*#__PURE__*/ jsxRuntime.jsx(designSystem.Button, {
                                                 fullWidth: true,
                                                 type: "submit",
+                                                disabled: !otpStep && isLoggingIn,
                                                 children: formatMessage({
                                                     id: otpStep ? 'Auth.form.button.verifyOtp' : 'Auth.form.button.login',
-                                                    defaultMessage: otpStep ? 'Verify OTP' : 'Login'
+                                                    defaultMessage: otpStep ? 'Verify OTP' : isLoggingIn ? 'Login...' : 'Login'
                                                 })
                                             }),
                                             otpStep ? /*#__PURE__*/ jsxRuntime.jsxs(designSystem.Flex, {
