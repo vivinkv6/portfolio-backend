@@ -18,8 +18,11 @@ import { translatedErrors as errorsTrads } from '../../../utils/translatedErrors
 
 const OTP_LENGTH = 6;
 const OTP_DIGIT_INPUT_STYLE = {
-    width: '3.75rem',
-    height: '4.5rem',
+    width: 'min(3.75rem, calc((100vw - 7rem) / 6))',
+    minWidth: '2.7rem',
+    maxWidth: '3.75rem',
+    flex: '1 1 0',
+    height: 'min(4.5rem, calc((100vw - 7rem) / 5.4))',
     borderRadius: '1rem',
     borderStyle: 'solid',
     borderWidth: '2px',
@@ -152,9 +155,14 @@ const OtpField = ()=>{
             /*#__PURE__*/ jsx(Box, {
                 paddingBottom: 2,
                 children: /*#__PURE__*/ jsx(Flex, {
-                    gap: 3,
+                    gap: 2,
                     justifyContent: "center",
-                    wrap: "wrap",
+                    wrap: "nowrap",
+                    width: "100%",
+                    style: {
+                        maxWidth: '24rem',
+                        marginInline: 'auto'
+                    },
                     onPaste: handlePaste,
                     children: digits.map((digit, index)=>/*#__PURE__*/ jsx("input", {
                             "aria-invalid": errors.code ? 'true' : 'false',
