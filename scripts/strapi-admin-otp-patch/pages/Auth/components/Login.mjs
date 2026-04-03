@@ -205,7 +205,7 @@ const Login = ({ children })=>{
     const dispatch = useTypedDispatch();
     const { toggleNotification } = useNotification();
     const [adminLoginWithOtp, { isLoading: isLoggingIn }] = useAdminLoginWithOtpMutation();
-    const [verifyAdminLoginOtp] = useVerifyAdminLoginOtpMutation();
+    const [verifyAdminLoginOtp, { isLoading: isVerifyingOtp }] = useVerifyAdminLoginOtpMutation();
     const [resendAdminLoginOtp, { isLoading: isResendingOtp }] = useResendAdminLoginOtpMutation();
     React.useEffect(()=>{
         document.title = 'Admin Dashboard';
@@ -244,6 +244,13 @@ const Login = ({ children })=>{
         if ('error' in res) {
             setApiError(res.error.message ?? 'Something went wrong');
         } else {
+            toggleNotification({
+                type: 'success',
+                title: formatMessage({
+                    id: 'Auth.notification.authenticated.title',
+                    defaultMessage: 'Successfully authenticated'
+                })
+            });
             dispatch(loginAction({
                 token: res.data.token,
                 persist: otpStep.rememberMe
@@ -399,10 +406,11 @@ const Login = ({ children })=>{
                                             /*#__PURE__*/ jsx(Button, {
                                                 fullWidth: true,
                                                 type: "submit",
-                                                disabled: !otpStep && isLoggingIn,
+                                                disabled: otpStep ? isVerifyingOtp : isLoggingIn,
+                                                loading: otpStep ? isVerifyingOtp : isLoggingIn,
                                                 children: formatMessage({
                                                     id: otpStep ? 'Auth.form.button.verifyOtp' : 'Auth.form.button.login',
-                                                    defaultMessage: otpStep ? 'Verify OTP' : isLoggingIn ? 'Login...' : 'Login'
+                                                    defaultMessage: otpStep ? isVerifyingOtp ? 'Verifying...' : 'Verify OTP' : isLoggingIn ? 'Login...' : 'Login'
                                                 })
                                             }),
                                             otpStep ? /*#__PURE__*/ jsxs(Flex, {
