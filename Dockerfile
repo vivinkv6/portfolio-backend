@@ -1,6 +1,8 @@
 # Creating multi-stage build for production
-FROM node:22-alpine AS build
-RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
+FROM node:22-bookworm-slim AS build
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential python3 pkg-config libvips-dev git ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
@@ -19,8 +21,10 @@ COPY . .
 RUN npm run build
 
 # Creating final production image
-FROM node:22-alpine
-RUN apk add --no-cache vips-dev
+FROM node:22-bookworm-slim
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libvips-dev wget ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 WORKDIR /opt/
