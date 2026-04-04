@@ -1,61 +1,70 @@
-# 🚀 Getting started with Strapi 
+# Portfolio Backend
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+## Local development
 
-### `develop`
-
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
-
-```
+```bash
 npm run develop
-# or
-yarn develop
 ```
 
-### `start`
+Production start:
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
+```bash
 npm run build
-# or
-yarn build
+npm run start
 ```
 
-## ⚙️ Deployment
+## GHCR deployment flow
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+This repo publishes a Docker image to GitHub Container Registry from [`.github/workflows/docker-ghcr.yml`](./.github/workflows/docker-ghcr.yml).
 
-```
-yarn strapi deploy
-```
+On every push to `master`, GitHub Actions will:
 
-## 📚 Learn more
+1. build the production image from [`Dockerfile`](./Dockerfile)
+2. push it to `ghcr.io/vivinkv6/portfolio-backend`
+3. update the `latest` tag for the default branch
+4. optionally trigger Coolify to pull and restart if `COOLIFY_WEBHOOK` and `COOLIFY_TOKEN` are configured as GitHub Actions secrets
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+Useful image tags:
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+- `ghcr.io/vivinkv6/portfolio-backend:latest`
+- `ghcr.io/vivinkv6/portfolio-backend:master`
+- `ghcr.io/vivinkv6/portfolio-backend:sha-<commit>`
 
-## ✨ Community
+## Coolify setup
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+You can deploy this in Coolify with either:
 
----
+1. a `Docker Image` resource pointing at `ghcr.io/vivinkv6/portfolio-backend:latest`
+2. a Docker Compose resource using [`docker-compose.ghcr.yml`](./docker-compose.ghcr.yml)
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+If the package is private, create a GitHub personal access token with `read:packages` and use it in Coolify's registry credentials for `ghcr.io`.
+
+For automatic redeploys after each successful image push, add these GitHub Actions secrets in this repository:
+
+- `COOLIFY_WEBHOOK`
+- `COOLIFY_TOKEN`
+
+Required runtime variables still come from Coolify or your host environment:
+
+- `URL`
+- `APP_KEYS`
+- `API_TOKEN_SALT`
+- `ADMIN_JWT_SECRET`
+- `TRANSFER_TOKEN_SALT`
+- `ENCRYPTION_KEY`
+- `JWT_SECRET`
+- `DATABASE_CLIENT`
+- `DATABASE_HOST`
+- `DATABASE_PORT`
+- `DATABASE_NAME`
+- `DATABASE_USERNAME`
+- `DATABASE_PASSWORD`
+- `DATABASE_SSL`
+- `DATABASE_FILENAME`
+- `CLOUDINARY_NAME`
+- `CLOUDINARY_KEY`
+- `CLOUDINARY_SECRET`
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+
+Uploads remain persisted via the named volume mounted at `/opt/app/public/uploads`.
