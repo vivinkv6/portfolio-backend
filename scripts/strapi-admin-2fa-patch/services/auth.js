@@ -79,7 +79,7 @@ const authService = api.adminApi.enhanceEndpoints({
             adminLoginWithOtp: builder.mutation({
                 query: (body)=>({
                         method: 'POST',
-                        url: '/api/admin-otp/login',
+                        url: '/api/admin-2fa/login',
                         data: body
                     }),
                 transformResponse (res) {
@@ -89,7 +89,7 @@ const authService = api.adminApi.enhanceEndpoints({
             verifyAdminLoginOtp: builder.mutation({
                 query: (body)=>({
                         method: 'POST',
-                        url: '/api/admin-otp/verify',
+                        url: '/api/admin-2fa/verify',
                         data: body
                     }),
                 transformResponse (res) {
@@ -102,7 +102,7 @@ const authService = api.adminApi.enhanceEndpoints({
             resendAdminLoginOtp: builder.mutation({
                 query: (body)=>({
                         method: 'POST',
-                        url: '/api/admin-otp/resend',
+                        url: '/api/admin-2fa/resend',
                         data: body
                     }),
                 transformResponse (res) {

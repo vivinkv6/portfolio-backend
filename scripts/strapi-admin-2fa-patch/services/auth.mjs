@@ -8,9 +8,7 @@ const authService = adminApi.enhanceEndpoints({
     ]
 }).injectEndpoints({
     endpoints: (builder)=>({
-            /**
-       * ME
-       */ getMe: builder.query({
+            getMe: builder.query({
                 query: ()=>({
                         method: 'GET',
                         url: '/admin/users/me'
@@ -50,18 +48,14 @@ const authService = adminApi.enhanceEndpoints({
                     'Me'
                 ]
             }),
-            /**
-       * Permissions
-       */ checkPermissions: builder.query({
+            checkPermissions: builder.query({
                 query: (permissions)=>({
                         method: 'POST',
                         url: '/admin/permissions/check',
                         data: permissions
                     })
             }),
-            /**
-       * Auth methods
-       */ login: builder.mutation({
+            login: builder.mutation({
                 query: (body)=>({
                         method: 'POST',
                         url: '/admin/login',
@@ -77,7 +71,7 @@ const authService = adminApi.enhanceEndpoints({
             adminLoginWithOtp: builder.mutation({
                 query: (body)=>({
                         method: 'POST',
-                        url: '/api/admin-otp/login',
+                        url: '/api/admin-2fa/login',
                         data: body
                     }),
                 transformResponse (res) {
@@ -87,7 +81,7 @@ const authService = adminApi.enhanceEndpoints({
             verifyAdminLoginOtp: builder.mutation({
                 query: (body)=>({
                         method: 'POST',
-                        url: '/api/admin-otp/verify',
+                        url: '/api/admin-2fa/verify',
                         data: body
                     }),
                 transformResponse (res) {
@@ -100,7 +94,7 @@ const authService = adminApi.enhanceEndpoints({
             resendAdminLoginOtp: builder.mutation({
                 query: (body)=>({
                         method: 'POST',
-                        url: '/api/admin-otp/resend',
+                        url: '/api/admin-2fa/resend',
                         data: body
                     }),
                 transformResponse (res) {
@@ -221,4 +215,3 @@ const authService = adminApi.enhanceEndpoints({
 const { useCheckPermissionsQuery, useLazyCheckPermissionsQuery, useGetMeQuery, useLoginMutation, useAdminLoginWithOtpMutation, useVerifyAdminLoginOtpMutation, useResendAdminLoginOtpMutation, useAccessTokenExchangeMutation, useLogoutMutation, useUpdateMeMutation, useResetPasswordMutation, useRegisterAdminMutation, useRegisterUserMutation, useGetRegistrationInfoQuery, useForgotPasswordMutation, useGetMyPermissionsQuery, useIsSSOLockedQuery, useGetProvidersQuery, useGetProviderOptionsQuery, useUpdateProviderOptionsMutation } = authService;
 
 export { useAccessTokenExchangeMutation, useAdminLoginWithOtpMutation, useCheckPermissionsQuery, useForgotPasswordMutation, useGetMeQuery, useGetMyPermissionsQuery, useGetProviderOptionsQuery, useGetProvidersQuery, useGetRegistrationInfoQuery, useIsSSOLockedQuery, useLazyCheckPermissionsQuery, useLoginMutation, useLogoutMutation, useRegisterAdminMutation, useRegisterUserMutation, useResendAdminLoginOtpMutation, useResetPasswordMutation, useUpdateMeMutation, useUpdateProviderOptionsMutation, useVerifyAdminLoginOtpMutation };
-//# sourceMappingURL=auth.mjs.map

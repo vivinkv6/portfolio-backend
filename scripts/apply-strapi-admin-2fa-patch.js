@@ -8,7 +8,7 @@ const patchFiles = [
     source: path.join(
       rootDir,
       "scripts",
-      "strapi-admin-otp-patch",
+      "strapi-admin-2fa-patch",
       "pages",
       "Auth",
       "components",
@@ -33,7 +33,7 @@ const patchFiles = [
     source: path.join(
       rootDir,
       "scripts",
-      "strapi-admin-otp-patch",
+      "strapi-admin-2fa-patch",
       "pages",
       "Auth",
       "components",
@@ -55,7 +55,7 @@ const patchFiles = [
     ),
   },
   {
-    source: path.join(rootDir, "scripts", "strapi-admin-otp-patch", "services", "auth.js"),
+    source: path.join(rootDir, "scripts", "strapi-admin-2fa-patch", "services", "auth.js"),
     target: path.join(
       rootDir,
       "node_modules",
@@ -70,7 +70,7 @@ const patchFiles = [
     ),
   },
   {
-    source: path.join(rootDir, "scripts", "strapi-admin-otp-patch", "services", "auth.mjs"),
+    source: path.join(rootDir, "scripts", "strapi-admin-2fa-patch", "services", "auth.mjs"),
     target: path.join(
       rootDir,
       "node_modules",
@@ -96,7 +96,7 @@ const missing = patchFiles.find(
 );
 
 if (missing) {
-  console.warn("[admin-otp-patch] Skipping Strapi admin patch because a source or target file is missing.");
+  console.warn("[admin-2fa-patch] Skipping Strapi admin patch because a source or target file is missing.");
   process.exit(0);
 }
 
@@ -111,5 +111,5 @@ for (const generatedDir of generatedCacheDirs) {
 }
 
 console.log(
-  "[admin-otp-patch] Applied Strapi admin OTP login patch and cleared Strapi admin caches."
+  "[admin-2fa-patch] Applied Strapi admin OTP login patch and cleared Strapi admin caches."
 );
