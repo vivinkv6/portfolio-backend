@@ -53,17 +53,17 @@ const config = ({
         greetingTimeout: 10000,
         socketTimeout: 60000,
         auth: {
-          user: process.env.SMTP_USERNAME,
-          pass: process.env.SMTP_PASSWORD,
+          user: env("SMTP_USERNAME"),
+          pass: env("SMTP_PASSWORD"),
         },
         secure: false,
         tls: {
-          rejectUnauthorized: false,
+          rejectUnauthorized: true,
         },
       },
       settings: {
-        defaultFrom: process.env.SMTP_USERNAME,
-        defaultReplyTo: process.env.SMTP_USERNAME,
+        defaultFrom: env("SMTP_USERNAME"),
+        defaultReplyTo: env("SMTP_USERNAME"),
       },
     },
   },
