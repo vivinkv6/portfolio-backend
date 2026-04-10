@@ -58,7 +58,7 @@ const config = ({
         },
         secure: false,
         tls: {
-          rejectUnauthorized: true,
+          rejectUnauthorized: false,
         },
       },
       settings: {
