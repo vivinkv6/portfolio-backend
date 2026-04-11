@@ -44,9 +44,9 @@ email: {
   config: {
     provider: "nodemailer",
     providerOptions: {
-      host: "smtp.resend.com",
-      port: 2465,
-      secure: true,
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
         user: env("SMTP_USERNAME"),
         pass: env("SMTP_PASSWORD"),
@@ -59,8 +59,8 @@ email: {
       },
     },
     settings: {
-      defaultFrom: env("SMTP_FROM_EMAIL"),
-      defaultReplyTo: env("SMTP_FROM_EMAIL"),
+      defaultFrom: env("SMTP_USERNAME"),
+      defaultReplyTo: env("SMTP_USERNAME"),
     },
   },
 },

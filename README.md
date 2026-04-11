@@ -64,7 +64,15 @@ Required runtime variables still come from Coolify or your host environment:
 - `CLOUDINARY_NAME`
 - `CLOUDINARY_KEY`
 - `CLOUDINARY_SECRET`
+- `SMTP_HOST` (defaults to `smtp.resend.com`)
+- `SMTP_PORT` (defaults to `465`)
+- `SMTP_SECURE` (defaults to `true`)
 - `SMTP_USERNAME`
 - `SMTP_PASSWORD`
+- `SMTP_FROM_EMAIL`
+- `SMTP_CONNECTION_TIMEOUT`
+- `SMTP_GREETING_TIMEOUT`
+- `SMTP_SOCKET_TIMEOUT`
+- `SMTP_TLS_REJECT_UNAUTHORIZED` (defaults to `true`)
 
 Uploads remain persisted via the named volume mounted at `/opt/app/public/uploads`.
