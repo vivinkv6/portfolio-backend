@@ -16,6 +16,22 @@ export default {
         isResizable: true,
       },
     });
+
+    strapi.server.routes([
+      {
+        method: 'GET',
+        path: '/_health',
+        handler(ctx) {
+          ctx.status = 200;
+          ctx.body = {
+            message: 'Strapi admin Panel is Healthy',
+          };
+        },
+        config: {
+          auth: false,
+        },
+      },
+    ]);
   },
 
   /**
