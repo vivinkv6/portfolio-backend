@@ -40,33 +40,30 @@ const config = ({
       autoOrientation: false,
     },
   },
-  email: {
-    config: {
-      provider: "nodemailer",
-      providerOptions: {
-        host: "smtp.gmail.com",
-        port: 587,
-        pool: true,
-        maxConnections: 5,
-        maxMessages: 100,
-        connectionTimeout: 10000,
-        greetingTimeout: 10000,
-        socketTimeout: 60000,
-        auth: {
-          user: env("SMTP_USERNAME"),
-          pass: env("SMTP_PASSWORD"),
-        },
-        secure: false,
-        tls: {
-          rejectUnauthorized: false,
-        },
+email: {
+  config: {
+    provider: "nodemailer",
+    providerOptions: {
+      host: "smtp.resend.com",
+      port: 2465,
+      secure: true,
+      auth: {
+        user: env("SMTP_USERNAME"),
+        pass: env("SMTP_PASSWORD"),
       },
-      settings: {
-        defaultFrom: env("SMTP_USERNAME"),
-        defaultReplyTo: env("SMTP_USERNAME"),
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
+      tls: {
+        rejectUnauthorized: false,
       },
     },
+    settings: {
+      defaultFrom: env("SMTP_FROM_EMAIL"),
+      defaultReplyTo: env("SMTP_FROM_EMAIL"),
+    },
   },
+},
 });
 
 export default config;
