@@ -933,6 +933,13 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    content: Schema.Attribute.RichText &
+      Schema.Attribute.CustomField<
+        'plugin::ckeditor5.CKEditor',
+        {
+          preset: 'defaultHtml';
+        }
+      >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -948,8 +955,8 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     screenshot: Schema.Attribute.Media<'images'>;
     seo: Schema.Attribute.Component<'common.seo', false>;
-    short_description: Schema.Attribute.Text;
     skills: Schema.Attribute.Relation<'manyToMany', 'api::skill.skill'>;
+    slug: Schema.Attribute.UID<'title'>;
     source_code_link: Schema.Attribute.String;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;

@@ -14,9 +14,6 @@
     "title": {
       "type": "string"
     },
-    "short_description": {
-      "type": "text"
-    },
     "skills": {
       "type": "relation",
       "relation": "manyToMany",
@@ -47,6 +44,17 @@
       "type": "component",
       "component": "common.seo",
       "repeatable": false
+    },
+    "content": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
     }
   }
 }
